@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font pango:Inconsolata NF 12
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -282,7 +282,10 @@ for_window [class="URxvt*"] border pixel 1
 # Terminal scratchpad
 for_window [instance="urxvt_scratchpad"] move to scratchpad, border none
 bindsym $mod+Shift+t [instance="urxvt_scratchpad"] scratchpad show
-exec urxvtc -name urxvt_scratchpad
+exec urxvtc -name urxvt_scratchpad \
+-e tmux new-session -d -s scratchpad \; \
+new-window -n vim 'nvim +e /tmp/nvim-tmp.md' \; \
+attach-session -d -t scratchpad
 
 # htop scratchpad
 for_window [instance="htop_scratchpad"] move to scratchpad, border none
@@ -321,3 +324,8 @@ set $mode_display Config monitor resolution - Default config (d)
         bindsym Escape mode "default"
     }
     bindsym $mod+x mode "$mode_display"
+
+exec --no-startup-id dunst
+
+bindsym $mod+z exec "setxkbmap -option 'caps:ctrl_modifier'; xcape -e 'Caps_Lock=Escape' &"
+
